@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1 # 만약 apiVersion들 확인하고 싶다면 kubectl api-versions 치기
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2 # 여기서 /랑 /$1 주의,  /$1 하면 path에 /{path} 설정가능
+spec:
+  rules:
+  - host: test.com
+    http:
+      paths:
+      - path: /nest(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: nest-service
+            port:
+              number: 3000
+      - path: /java(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: boot-service
+            port:
+              number: 8081
